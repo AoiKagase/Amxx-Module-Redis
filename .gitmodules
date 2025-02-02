@@ -1,0 +1,6 @@
+[submodule "public/hiredis"]
+	path = public/hiredis
+	url = https://github.com/redis/hiredis.git
+[submodule "public/redis-plus-plus"]
+	path = public/redis-plus-plus
+	url = https://github.com/sewenew/redis-plus-plus.git
