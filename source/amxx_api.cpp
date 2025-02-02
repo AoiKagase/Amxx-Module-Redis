@@ -11,5 +11,7 @@ void OnPluginsLoaded()
 
 void OnPluginsUnloaded()
 {
+	g_redis->bgsave();
+	delete g_redis;
 }
 
