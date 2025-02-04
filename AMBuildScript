@@ -154,6 +154,12 @@ binary = cxx.Library(name)
 binary.sources += [
   'source/amxx_api.cpp',
   'source/natives.cpp',
+  'source/natives_redis.cpp',
+  'source/natives_redis_delete.cpp',
+  'source/natives_redis_get.cpp',
+  'source/natives_redis_set.cpp',
+  'source/natives_redis_hget.cpp',
+  'source/natives_redis_hset.cpp',
 
   'public/amxxsdk/amxxmodule.cpp'
 ]
