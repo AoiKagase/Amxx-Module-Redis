@@ -76,7 +76,7 @@ jobs:
         run: |
           mkdir -p public/redis-plus-plus/build
           cd public/redis-plus-plus/build
-          cmake .. -DHIREDIS_HEADER=${{ github.workspace }}/public -DHIREDIS_LIB=${{ github.workspace }}/public/hiredis/libhiredis.a -DENABLE_SSL=OFF -DCMAKE_CXX_FLAGS="-m32 -D_GLIBCXX_USE_CXX11_ABI=0" -DBUILD_SHARED_LIBS=OFF -DREDIS_PLUS_PLUS_BUILD_TEST=OFF -DREDIS_PLUS_PLUS_CXX_STANDARD=11
+          cmake .. -DHIREDIS_HEADER=${{ github.workspace }}/public -DHIREDIS_LIB=${{ github.workspace }}/public/hiredis/libhiredis.a -DENABLE_SSL=OFF -DCMAKE_CXX_FLAGS=-m32 -DBUILD_SHARED_LIBS=OFF -DREDIS_PLUS_PLUS_BUILD_TEST=OFF -DREDIS_PLUS_PLUS_CXX_STANDARD=11
           make -j$(nproc)
           cd ../../..
 
@@ -85,7 +85,7 @@ jobs:
         run: |
           mkdir build
           cd build
-          CXXFLAGS="-D_GLIBCXX_USE_CXX11_ABI=0" python3 ../configure.py --enable-optimize --metamod=${{ github.workspace }}/metamod-am --hlsdk=${{ github.workspace }}/hlsdk-am
+          python3 ../configure.py --enable-optimize --metamod=${{ github.workspace }}/metamod-am --hlsdk=${{ github.workspace }}/hlsdk-am
           ambuild
 
       - name: Upload Linux artifacts
