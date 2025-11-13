@@ -3,12 +3,12 @@ name: Build Redis Module
 on:
   push:
     branches:
-      - main
       - master
+      - github-actions
   pull_request:
     branches:
-      - main
       - master
+      - github-actions
   workflow_dispatch:
 
 jobs:
