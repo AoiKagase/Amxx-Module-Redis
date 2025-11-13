@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - master
-      - github-actions
   pull_request:
     branches:
       - master
-      - github-actions
   workflow_dispatch:
 
 jobs:
