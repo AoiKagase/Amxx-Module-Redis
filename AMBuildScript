@@ -126,10 +126,10 @@ elif cxx.like('msvc'):
 
   if builder.options.debug == '1':
     cxx.cflags += ['/MTd', '/Od', '/RTC1']
-    cxx.linkflags += ['/NODEFAULTLIB:libcmt']
+    cxx.linkflags += ['/NODEFAULTLIB:libcmt', '/NODEFAULTLIB:MSVCRT']
   else:
     cxx.cflags += ['/MT']
-    cxx.linkflags += ['/NODEFAULTLIB:MSVCRT']
+    cxx.linkflags += ['/NODEFAULTLIB:MSVCRT', '/NODEFAULTLIB:MSVCRTD']
 
 
 
