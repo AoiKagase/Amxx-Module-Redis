@@ -63,6 +63,7 @@ server_print("[REDIS] BENCHMARK %d SEC", bench);
 
 ---
 ## I need your help.
-- Build environment on Windows.
-- Automatic build of external libraries.
+- ~~Build environment on Windows.~~
+- ~~Automatic build of external libraries.~~
+  -  Implemented by [MisterCalvin](https://github.com/MisterCalvin). Thanks.
 - If there is a feature you would like to see, please send a request to Issue.
