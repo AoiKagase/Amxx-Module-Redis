@@ -63,6 +63,13 @@ cxx.defines += [
     'HAVE_STDINT_H'
   ]
 
+if cxx.like('msvc'):
+  # Fix Windows SDK conflicts with hiredis POSIX declarations
+  cxx.defines += [
+    '_CRT_NONSTDC_NO_DEPRECATE',
+    '_CRT_DECLARE_NONSTDC_NAMES=0'
+  ]
+
 if cxx.like('gcc'):
   cxx.cflags += [
     '-Wall',
@@ -87,6 +94,8 @@ if cxx.like('gcc'):
     '-lpthread',
     '-lm',
     '-m32',
+    '-static-libgcc',
+    '-static-libstdc++',
   ]
 
   if builder.options.opt == '1':
@@ -102,10 +111,13 @@ elif cxx.like('msvc'):
   ]
 
   cxx.linkflags += [
+    os.path.join(builder.sourcePath, 'public', 'redis-plus-plus', 'build', 'Release', 'redis++_static.lib'),
+    os.path.join(builder.sourcePath, 'public', 'hiredis', 'build', 'Release', 'hiredis.lib'),
     '/MACHINE:X86',
     '/SUBSYSTEM:WINDOWS',
     '/EXPORT:GiveFnptrsToDll=_GiveFnptrsToDll@8,@1',
     'kernel32.lib',
+    'ws2_32.lib',
   ]
 
   if builder.options.opt == '1':
@@ -114,9 +126,10 @@ elif cxx.like('msvc'):
 
   if builder.options.debug == '1':
     cxx.cflags += ['/MTd', '/Od', '/RTC1']
-    cxx.linkflags += ['/NODEFAULTLIB:libcmt']
+    cxx.linkflags += ['/NODEFAULTLIB:libcmt', '/NODEFAULTLIB:MSVCRT']
   else:
     cxx.cflags += ['/MT']
+    cxx.linkflags += ['/NODEFAULTLIB:MSVCRT', '/NODEFAULTLIB:MSVCRTD']
 
 
 

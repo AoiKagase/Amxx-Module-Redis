@@ -1,0 +1,157 @@
+name: Build Redis Module
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            os_short: linux
+          - os: windows-2022
+            os_short: windows
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.os_short }}-build
+    env:
+      DEPENDENCIES_FOLDER: dependencies
+      DEPENDENCIES_ROOT: ${{ github.workspace }}/dependencies
+      DEPENDENCIES_ROOT_WIN: ${{ github.workspace }}\dependencies
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Python dependencies
+        run: |
+          python3 -m pip install --upgrade pip setuptools wheel
+
+      - name: Install Linux dependencies
+        if: startsWith(runner.os, 'Linux')
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            gcc-multilib g++-multilib libstdc++6 lib32stdc++6 \
+            libc6-dev libc6-dev-i386 linux-libc-dev \
+            linux-libc-dev:i386 lib32z1-dev nasm cmake git
+
+      - name: Install AMBuild (Linux)
+        if: startsWith(runner.os, 'Linux')
+        run: |
+          git clone https://github.com/alliedmodders/ambuild.git
+          cd ambuild
+          python3 setup.py install
+          cd ..
+
+      - name: Clone dependencies (Linux)
+        if: startsWith(runner.os, 'Linux')
+        run: |
+          git clone https://github.com/alliedmodders/metamod-hl1 metamod-am
+          git clone https://github.com/alliedmodders/hlsdk hlsdk-am
+
+      - name: Build hiredis (Linux)
+        if: startsWith(runner.os, 'Linux')
+        run: |
+          cd public/hiredis
+          make -j$(nproc) CFLAGS="-m32" LDFLAGS="-m32"
+          cd ../..
+
+      - name: Build redis-plus-plus (Linux)
+        if: startsWith(runner.os, 'Linux')
+        run: |
+          mkdir -p public/redis-plus-plus/build
+          cd public/redis-plus-plus/build
+          cmake .. -DHIREDIS_HEADER=${{ github.workspace }}/public -DHIREDIS_LIB=${{ github.workspace }}/public/hiredis/libhiredis.a -DENABLE_SSL=OFF -DCMAKE_CXX_FLAGS=-m32 -DBUILD_SHARED_LIBS=OFF -DREDIS_PLUS_PLUS_BUILD_TEST=OFF -DREDIS_PLUS_PLUS_CXX_STANDARD=11
+          make -j$(nproc)
+          cd ../../..
+
+      - name: Build redis module (Linux)
+        if: startsWith(runner.os, 'Linux')
+        run: |
+          mkdir build
+          cd build
+          python3 ../configure.py --enable-optimize --metamod=${{ github.workspace }}/metamod-am --hlsdk=${{ github.workspace }}/hlsdk-am
+          ambuild
+
+      - name: Upload Linux artifacts
+        if: startsWith(runner.os, 'Linux') && success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redis-linux-${{ github.sha }}
+          path: build/redis_amxx_i386/*.so
+          retention-days: 7
+
+      - uses: ilammy/msvc-dev-cmd@v1
+        if: startsWith(runner.os, 'Windows')
+        with:
+          arch: x86
+
+      - name: Install Windows dependencies
+        if: startsWith(runner.os, 'Windows')
+        shell: cmd
+        run: |
+          mkdir %DEPENDENCIES_ROOT_WIN%
+          cd /d %DEPENDENCIES_ROOT_WIN%
+          git clone https://github.com/alliedmodders/ambuild
+          git clone https://github.com/alliedmodders/metamod-hl1 metamod-am
+          git clone https://github.com/alliedmodders/hlsdk
+          cd ambuild
+          python3 setup.py install
+          cd ..
+
+      - uses: ilammy/setup-nasm@v1
+        if: startsWith(runner.os, 'Windows')
+
+      - name: Build hiredis (Windows)
+        if: startsWith(runner.os, 'Windows')
+        shell: cmd
+        run: |
+          cd public\hiredis
+          mkdir build
+          cd build
+          cmake .. -G "Visual Studio 17 2022" -A "Win32" -DCMAKE_POLICY_VERSION_MINIMUM="3.5" -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS_RELEASE="/MT /O2 /DNDEBUG /D_CRT_NONSTDC_NO_DEPRECATE /NODEFAULTLIB:MSVCRT" -DCMAKE_CXX_FLAGS_RELEASE="/MT /O2 /DNDEBUG /D_CRT_NONSTDC_NO_DEPRECATE /NODEFAULTLIB:MSVCRT"
+          msbuild hiredis.vcxproj /p:Configuration=Release /p:Platform=Win32 /p:RuntimeLibrary=MultiThreaded /p:PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_DECLARE_NONSTDC_NAMES=0" /p:CppLanguageVersion=Latest
+          cd ..\..\..
+
+      - name: Build redis-plus-plus (Windows)
+        if: startsWith(runner.os, 'Windows')
+        shell: cmd
+        run: |
+          cd public\redis-plus-plus
+          mkdir build
+          cd build
+          cmake .. -G "Visual Studio 17 2022" -A "Win32" -DHIREDIS_HEADER="${{ github.workspace }}\public" -DHIREDIS_LIB="${{ github.workspace }}\public\hiredis\build\Release\hiredis.lib" -DENABLE_SSL=OFF -DBUILD_SHARED_LIBS=OFF -DREDIS_PLUS_PLUS_BUILD_SHARED=OFF -DREDIS_PLUS_PLUS_BUILD_TEST=OFF -DREDIS_PLUS_PLUS_CXX_STANDARD=11 -DCMAKE_POLICY_VERSION_MINIMUM="3.5" -DCMAKE_C_FLAGS_RELEASE="/MT /O2 /DNDEBUG /D_CRT_NONSTDC_NO_DEPRECATE /NODEFAULTLIB:MSVCRT" -DCMAKE_CXX_FLAGS_RELEASE="/MT /O2 /DNDEBUG /D_CRT_NONSTDC_NO_DEPRECATE /NODEFAULTLIB:MSVCRT"
+          msbuild redis++.sln /p:Configuration=Release /p:Platform=Win32 /p:RuntimeLibrary=MultiThreaded /p:PreprocessorDefinitions="_CRT_NONSTDC_NO_DEPRECATE;_CRT_DECLARE_NONSTDC_NAMES=0" /p:CppLanguageVersion=Latest
+          cd ..\..\..
+
+      - name: Build redis module (Windows)
+        if: startsWith(runner.os, 'Windows')
+        shell: cmd
+        run: |
+          mkdir build
+          cd build
+          python3 ..\configure.py --enable-optimize --metamod=%DEPENDENCIES_ROOT_WIN%\metamod-am --hlsdk=%DEPENDENCIES_ROOT_WIN%\hlsdk
+          ambuild
+
+      - name: Upload Windows artifacts
+        if: startsWith(runner.os, 'Windows') && success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: redis-windows-${{ github.sha }}
+          path: |
+            build/redis_amxx/*.dll
+            build/redis_amxx/*.pdb
+          retention-days: 7
