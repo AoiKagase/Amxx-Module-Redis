@@ -24,3 +24,5 @@ native redis_hget_integer(const key[], const field[]);
 native redis_del_key(const key[]);
 
 native redis_hdel_field(const key[], const field[]);
+
+native redis_publish(const channel[], const message[]);

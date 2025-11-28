@@ -18,6 +18,9 @@ static cell Native_RedisHGetInteger(AMX *amx, cell *params) {return redis_hget_i
 static cell Native_RedisHSetString(AMX *amx, cell *params)  {return redis_hset_string(amx, params);}
 static cell Native_RedisHSetInteger(AMX *amx, cell *params) {return redis_hset_integer(amx, params);}
 
+static cell Native_RedisPublish(AMX* amx, cell* params)		{return redis_publish(amx, params); }
+//static cell Native_RedisSubscribe(AMX* amx, cell* params)	{return redis_subscribe(amx, params); }
+
 AMX_NATIVE_INFO g_natives[] =
 {
 	{"redis_connect", Native_RedisConnect},
@@ -31,5 +34,9 @@ AMX_NATIVE_INFO g_natives[] =
 	{"redis_hget_integer", Native_RedisHGetInteger},
 	{"redis_del_key", Native_RedisDeleteKey},
 	{"redis_hdel_field", Native_RedisHDeleteField},
+
+	{"redis_publish", Native_RedisPublish}
+	//{"redis_subscribe", Native_RedisSubscribe}
+
 	{nullptr, nullptr}
 };

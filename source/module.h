@@ -27,4 +27,6 @@ extern cell redis_hget_integer(AMX *amx, cell *params);
 extern cell redis_hset_string(AMX *amx, cell *params);
 extern cell redis_hset_integer(AMX *amx, cell *params);
 
+extern cell redis_publish(AMX* amx, cell* params);
+
 #endif // MODULE_H

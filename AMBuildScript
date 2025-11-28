@@ -173,6 +173,7 @@ binary.sources += [
   'source/natives_redis_set.cpp',
   'source/natives_redis_hget.cpp',
   'source/natives_redis_hset.cpp',
+  'source/natives_redis_publish.cpp',
 
   'public/amxxsdk/amxxmodule.cpp'
 ]
