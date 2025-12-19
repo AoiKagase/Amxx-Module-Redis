@@ -13,7 +13,7 @@ extern int HasRedisOnMessage;
 
 extern Subscriber sub;
 
-extern std::vector<string>* channels;
+extern std::vector<StringView>* channels;
 extern std::thread* th_subscriber;
 extern bool isSubsriberRunning;
 
