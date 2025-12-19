@@ -1,8 +1,6 @@
 #include "module.h"
 
 using namespace sw::redis;
-int ForwardRedisOnMessage = -1;
-int HasRedisOnMessage = -1;
 
 Subscriber sub;
 

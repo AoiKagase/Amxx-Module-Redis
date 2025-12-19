@@ -1,4 +1,7 @@
 #include "module.h"
+int ForwardRedisOnMessage = -1;
+int HasRedisOnMessage = -1;
+bool isSubsriverRunning = false;
 
 void OnAmxxAttach()
 {
