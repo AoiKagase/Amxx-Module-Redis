@@ -1,4 +1,4 @@
-#include "amxxmodule.h"
+#include "amxxsdk/amxxmodule.h"
 #include <amtl/am-algorithm.h>
 #include <amtl/am-string.h>
 
