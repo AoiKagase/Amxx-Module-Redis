@@ -4,8 +4,6 @@ using namespace sw::redis;
 
 std::vector<StringView> channels;
 std::thread *th_subscriber = NULL;
-bool isSubsriverRunning = false;
-int HasRedisOnMessage = -1;
 
 // native redis_subscribe(const channel[]);
 cell redis_register_subscriber(AMX *amx, cell *params)
