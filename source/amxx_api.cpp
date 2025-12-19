@@ -20,5 +20,6 @@ void OnPluginsUnloaded()
 	channels.clear();
 	g_redis->bgsave();
 	delete g_redis;
+	delete th_subscriber;
 }
 

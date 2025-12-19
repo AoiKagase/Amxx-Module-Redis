@@ -5,9 +5,6 @@ using namespace sw::redis;
 Redis* g_redis = NULL;
 ConnectionOptions g_connection_options;
 
-int ForwardRedisOnMessage = -1;
-int HasRedisOnMessage = -1;
-
 const char* convertToCString(const OptionalString& optStr) {
     if (optStr) {
         return optStr->c_str();
