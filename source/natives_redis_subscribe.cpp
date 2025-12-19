@@ -7,10 +7,14 @@ Subscriber sub;
 std::vector<string> *channels = NULL;
 std::thread *th_subscriber = NULL;
 bool isSubsriverRunning = false;
+int HasRedisOnMessage = -1;
 
 // native redis_subscribe(const channel[]);
 cell redis_register_subscriber(AMX *amx, cell *params)
 {
+	if (!HasRedisOnMessage)
+		return -1;
+
 	int len = 0;
 	std::string channel = MF_GetAmxString(amx, params[1], 0, &len);
 
@@ -30,6 +34,9 @@ cell redis_register_subscriber(AMX *amx, cell *params)
 // native redis_start_subscribe();
 void redis_start_subscribe(AMX* amx, cell* params)
 {
+	if (!HasRedisOnMessage)
+		return;
+
 	isSubsriverRunning = true;
 	sub.subscribe(channels);
 
