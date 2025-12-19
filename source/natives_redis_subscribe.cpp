@@ -23,7 +23,7 @@ cell redis_register_subscriber(AMX *amx, cell *params)
 		if (channels == NULL) {
 			channels = new std::vector<StringView>();
 		}
-		channels.push_back(channel);
+		channels.push_back(channel.c_str());
 	}
 	else
 		return -1;
@@ -39,23 +39,26 @@ void redis_start_subscribe(AMX* amx, cell* params)
 
 	isSubsriverRunning = true;
 	for (int i = 0; i < channels->size(); i++) {
-		sub.subscribe(channels[i]);
+		sub.subscribe(&channels[i]);
 	}
 
-	th_subscriber = new std::thread(
-		while (true)
-		{
-			if (!isSubsriberRunning)
-				break;
-
-			try
-			{
-				sub.consume();
-			}
-			catch (const Error& err)
-			{
-			}
-		}
-	);
+	th_subscriber = new std::thread(consumeThread);
 	th_subscriber->join();
+}
+
+void consumeThread()
+{
+	while (true)
+	{
+		if (!isSubsriberRunning)
+			break;
+
+		try
+		{
+			sub.consume();
+		}
+		catch (const Error& err)
+		{
+		}
+	}
 }
