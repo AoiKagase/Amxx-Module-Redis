@@ -28,7 +28,7 @@ cell redis_register_subscriber(AMX *amx, cell *params)
 }
 
 // native redis_start_subscribe();
-cell redis_start_subscribe(AMX* amx, cell* params)
+void redis_start_subscribe(AMX* amx, cell* params)
 {
 	isSubsriverRunning = true;
 	sub.subscribe(channels);
