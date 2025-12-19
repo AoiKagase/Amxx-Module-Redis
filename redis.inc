@@ -5,6 +5,8 @@
 
 native redis_connect(const hostip[], const port = 6379, const username[] = "", const password[] = "");
 
+native redis_register_subscriber(const channel[]);
+
 native redis_set_string(const key[], const value[]);
 
 native redis_set_integer(const key[], const value);
@@ -26,3 +28,6 @@ native redis_del_key(const key[]);
 native redis_hdel_field(const key[], const field[]);
 
 native redis_publish(const channel[], const message[]);
+
+native redis_start_subscribe();
+forward Redis_Subscriber_OnMessage(const channel[], const message[]);

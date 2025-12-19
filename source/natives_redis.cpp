@@ -5,6 +5,7 @@ using namespace sw::redis;
 Redis* g_redis = NULL;
 ConnectionOptions g_connection_options;
 
+
 const char* convertToCString(const OptionalString& optStr) {
     if (optStr) {
         return optStr->c_str();
@@ -35,6 +36,18 @@ cell redis_connect(AMX *amx, cell *params)
 	try 
     {
         g_redis = new Redis(g_connection_options);
+
+		if (HasRedisOnMessage) 
+		{
+			sub = g_redis.subscriber();
+
+			// Set callback functions.
+			sub.on_message([](std::string channel, std::string msg) {
+				// Process message of MESSAGE type.
+				MF_ExecuteForward(ForwardRedisOnMessage, channel, msg);
+			});
+		}
+
     } catch (const Error &e) {
 		MF_LogError(amx, AMX_ERR_NATIVE, "Redis Connecting Error.");
         return -1;
