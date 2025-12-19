@@ -37,4 +37,7 @@ extern cell redis_hset_integer(AMX *amx, cell *params);
 
 extern cell redis_publish(AMX* amx, cell* params);
 
+extern cell redis_register_subscriber(AMX* amx, cell* params);
+extern void redis_start_subscribe(AMX* amx, cell* params);
+
 #endif // MODULE_H
