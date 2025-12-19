@@ -175,6 +175,7 @@ binary.sources += [
   'source/natives_redis_hset.cpp',
   'source/natives_redis_publish.cpp',
   'source/natives_redis_subscribe.cpp',
+  'source/utilities.cpp',
 
   'public/amxxsdk/amxxmodule.cpp'
 ]
