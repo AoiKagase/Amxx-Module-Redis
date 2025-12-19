@@ -39,7 +39,7 @@ void redis_start_subscribe(AMX* amx, cell* params)
 
 	isSubsriverRunning = true;
 	for (int i = 0; i < channels->size(); i++) {
-		sub.subscribe(&channels[i]);
+		sub.subscribe(channels[i]);
 	}
 
 	th_subscriber = new std::thread(consumeThread);
