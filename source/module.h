@@ -15,7 +15,7 @@ extern Subscriber sub;
 
 extern std::vector<string>* channels;
 extern std::thread* th_subscriber;
-extern bool isSubsriverRunning = false;
+extern bool isSubsriberRunning;
 
 extern const char* convertToCString(const OptionalString& optStr);
 extern cell	redis_connect(AMX *amx, cell *params);

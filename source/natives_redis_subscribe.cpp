@@ -4,7 +4,7 @@ using namespace sw::redis;
 
 Subscriber sub;
 
-std::vector<string> *channels = NULL;
+std::vector<StringView> *channels = NULL;
 std::thread *th_subscriber = NULL;
 bool isSubsriverRunning = false;
 int HasRedisOnMessage = -1;
@@ -21,7 +21,7 @@ cell redis_register_subscriber(AMX *amx, cell *params)
 	if (g_redis != NULL)
 	{
 		if (channels == NULL) {
-			channels = new std::vector<string>();
+			channels = new std::vector<StringView>();
 		}
 		channels.push_back(channel);
 	}
@@ -38,12 +38,14 @@ void redis_start_subscribe(AMX* amx, cell* params)
 		return;
 
 	isSubsriverRunning = true;
-	sub.subscribe(channels);
+	for (int i = 0; i < channels->size(); i++) {
+		sub.subscribe(channels[i]);
+	}
 
 	th_subscriber = new std::thread(
 		while (true)
 		{
-			if (!isSubsriverRunning)
+			if (!isSubsriberRunning)
 				break;
 
 			try

@@ -1,7 +1,7 @@
 #include "module.h"
 int ForwardRedisOnMessage = -1;
 int HasRedisOnMessage = -1;
-bool isSubsriverRunning = false;
+bool isSubsriberRunning = false;
 
 void OnAmxxAttach()
 {
@@ -16,7 +16,7 @@ void OnPluginsLoaded()
 
 void OnPluginsUnloaded()
 {
-	isSubsriverRunning = false;
+	isSubsriberRunning = false;
 	channels->clear();
 	g_redis->bgsave();
 	delete g_redis;
