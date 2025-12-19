@@ -4,7 +4,7 @@ using namespace sw::redis;
 
 Redis* g_redis = NULL;
 ConnectionOptions g_connection_options;
-Subscriber sub;
+
 int ForwardRedisOnMessage = -1;
 int HasRedisOnMessage = -1;
 
@@ -41,7 +41,7 @@ cell redis_connect(AMX *amx, cell *params)
 
 		if (HasRedisOnMessage) 
 		{
-			sub = g_redis->subscriber();
+			auto sub = g_redis->subscriber();
 
 			// Set callback functions.
 			sub.on_message([](std::string channel, std::string msg) {

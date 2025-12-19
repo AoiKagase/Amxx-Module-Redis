@@ -11,9 +11,7 @@ extern Redis *g_redis;
 extern int ForwardRedisOnMessage;
 extern int HasRedisOnMessage;
 
-extern Subscriber sub;
-
-extern std::vector<StringView>* channels;
+extern std::vector<StringView> channels;
 extern std::thread* th_subscriber;
 extern bool isSubsriberRunning;
 
@@ -38,6 +36,8 @@ extern cell redis_hset_integer(AMX *amx, cell *params);
 extern cell redis_publish(AMX* amx, cell* params);
 
 extern cell redis_register_subscriber(AMX* amx, cell* params);
-extern void redis_start_subscribe(AMX* amx, cell* params);
+extern cell redis_start_subscribe(AMX* amx, cell* params);
+
+extern bool UTIL_CheckForPublic(const char* publicname);
 
 #endif // MODULE_H

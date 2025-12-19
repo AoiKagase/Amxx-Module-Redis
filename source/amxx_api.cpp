@@ -17,7 +17,7 @@ void OnPluginsLoaded()
 void OnPluginsUnloaded()
 {
 	isSubsriberRunning = false;
-	channels->clear();
+	channels.clear();
 	g_redis->bgsave();
 	delete g_redis;
 }
