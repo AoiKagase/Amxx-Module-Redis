@@ -1,6 +1,4 @@
 #include "amxxsdk/amxxmodule.h"
-#include <amtl/am-algorithm.h>
-#include <amtl/am-string.h>
 
 bool UTIL_CheckForPublic(const char* publicname)
 {
@@ -9,7 +7,8 @@ bool UTIL_CheckForPublic(const char* publicname)
 	int i = 0;
 	char blah[64];
 
-	ke::SafeStrcpy(blah, sizeof(blah), publicname);
+	strncpy(blah, publicname, sizeof(blah));
+	blah[63] = '\0';
 
 	while ((amx = MF_GetScriptAmx(i++)))
 	{
