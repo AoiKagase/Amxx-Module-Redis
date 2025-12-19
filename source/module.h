@@ -8,6 +8,14 @@ using namespace sw::redis;
 
 extern AMX_NATIVE_INFO g_natives[];
 extern Redis *g_redis;
+extern int ForwardRedisOnMessage;
+extern int HasRedisOnMessage;
+
+extern Subscriber sub;
+
+extern std::vector<string>* channels;
+extern std::thread* th_subscriber;
+extern bool isSubsriverRunning = false;
 
 extern const char* convertToCString(const OptionalString& optStr);
 extern cell	redis_connect(AMX *amx, cell *params);
