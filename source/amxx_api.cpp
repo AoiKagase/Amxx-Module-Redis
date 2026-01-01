@@ -1,7 +1,6 @@
 #include "module.h"
 int ForwardRedisOnMessage = -1;
 int HasRedisOnMessage = -1;
-bool isSubsriberRunning = false;
 
 void OnAmxxAttach()
 {
@@ -16,8 +15,6 @@ void OnPluginsLoaded()
 
 void stop_subscribe()
 {
-	isSubsriberRunning = false;
-
 	if (sub) {
 		delete sub;
 		sub = nullptr;

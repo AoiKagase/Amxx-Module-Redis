@@ -27,10 +27,9 @@ cell redis_register_subscriber(AMX *amx, cell *params)
 
 void consumeThread()
 {
-	isSubsriberRunning = true;
 	try
 	{
-		while (isSubsriberRunning)
+		while (true)
 		{
 			sub->consume();
 		}
@@ -38,6 +37,7 @@ void consumeThread()
 	catch (const Error& err)
 	{
 		LOG_CONSOLE(PLID, "[DEBUG] SUBSCRIBE ERROR: %s", err.what());
+		return;
 	}
 }
 

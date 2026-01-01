@@ -15,7 +15,6 @@ extern int HasRedisOnMessage;
 
 extern std::vector<std::string> channels;
 extern std::thread* th_subscriber;
-extern bool isSubsriberRunning;
 extern sw::redis::Subscriber* sub;
 
 extern const char* convertToCString(const OptionalString& optStr);
