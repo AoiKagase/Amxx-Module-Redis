@@ -17,6 +17,11 @@ void OnPluginsLoaded()
 void stop_subscribe()
 {
 	isSubscriberRunning = false;
+
+	if (th_subscriber && th_subscriber->joinable()) {
+		th_subscriber->join();
+	}
+
 	if (sub) {
 		sub->unsubscribe();
 		delete sub;
@@ -26,10 +31,6 @@ void stop_subscribe()
 	if (g_subscriber_redis) {
 		delete g_subscriber_redis;
 		g_subscriber_redis = nullptr;
-	}
-
-	if (th_subscriber && th_subscriber->joinable()) {
-		th_subscriber->join();
 	}
 }
 
