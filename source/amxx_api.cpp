@@ -16,6 +16,7 @@ void OnPluginsLoaded()
 void stop_subscribe()
 {
 	if (sub) {
+		sub->unsubscribe();
 		delete sub;
 		sub = nullptr;
 	}
