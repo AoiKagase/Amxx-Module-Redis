@@ -10,8 +10,8 @@ void OnAmxxAttach()
 
 void OnPluginsLoaded()
 {
-	ForwardRedisOnMessage = MF_RegisterForward("Redis_OnMessage", ET_STOP, FP_STRING, FP_STRING, FP_DONE);
-	HasRedisOnMessage = UTIL_CheckForPublic("Redis_OnMessage");
+	ForwardRedisOnMessage = MF_RegisterForward("Redis_Subscriber_OnMessage", ET_STOP, FP_STRING, FP_STRING, FP_DONE);
+	HasRedisOnMessage = UTIL_CheckForPublic("Redis_Subscriber_OnMessage");
 }
 
 void OnPluginsUnloaded()
