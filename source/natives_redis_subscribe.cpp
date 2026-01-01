@@ -51,10 +51,13 @@ void consumeThread()
 // native redis_start_subscribe();
 cell redis_start_subscribe(AMX* amx, cell* params)
 {
+#if DEBUG_LOGGING
 	MF_Log("[DEBUG] START SUBSCRIBE FUNCTION.");
-
+#endif
 	if (!HasRedisOnMessage) {
+#if DEBUG_LOGGING
 		MF_Log("[DEBUG] NOT EXISTS FORWARD. EXIT.");
+#endif
 		return -1;
 	}
 
@@ -62,12 +65,15 @@ cell redis_start_subscribe(AMX* amx, cell* params)
 		sub->subscribe(ch);
 	}
 
+#if DEBUG_LOGGING
 	MF_Log("[DEBUG] SUBSCRIBE CHANNELS.");
-
+#endif
 	th_subscriber = new std::thread(consumeThread);
+#if DEBUG_LOGGING
 	MF_Log("[DEBUG] CREATED THREAD.");
 
 	MF_Log("[DEBUG] END SUBSCRIBE FUNCTION.");
+#endif
 	return 0;
 }
 

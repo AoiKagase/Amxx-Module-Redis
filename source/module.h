@@ -4,6 +4,8 @@
 #include "amxxsdk/amxxmodule.h"
 #include "sw/redis++/redis++.h"
 
+#define DEBUG_LOGGING 0
+
 using namespace sw::redis;
 
 extern AMX_NATIVE_INFO g_natives[];
