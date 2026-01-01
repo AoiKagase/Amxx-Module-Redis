@@ -13,7 +13,7 @@ extern Redis* g_subscriber_redis;
 extern int ForwardRedisOnMessage;
 extern int HasRedisOnMessage;
 
-extern std::vector<StringView> channels;
+extern std::vector<std::string> channels;
 extern std::thread* th_subscriber;
 extern bool isSubsriberRunning;
 extern sw::redis::Subscriber* sub;

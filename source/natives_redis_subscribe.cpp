@@ -2,7 +2,7 @@
 
 using namespace sw::redis;
 
-std::vector<StringView> channels;
+std::vector<std::string> channels;
 std::thread *th_subscriber = NULL;
 
 // native redis_subscribe(const channel[]);
@@ -17,7 +17,7 @@ cell redis_register_subscriber(AMX *amx, cell *params)
 	channels.clear();
 	if (g_redis != NULL)
 	{
-		channels.push_back(channel.c_str());
+		channels.push_back(channel);
 	}
 	else
 		return -1;
@@ -51,9 +51,10 @@ cell redis_start_subscribe(AMX* amx, cell* params)
 		return -1;
 	}
 
-	for (size_t i = 0; i < channels.size(); i++) {
-		sub->subscribe(channels[i]);
+	for (auto& ch : channels) {
+		sub->subscribe(ch);
 	}
+
 	MF_Log("[DEBUG] SUBSCRIBE CHANNELS.");
 
 	th_subscriber = new std::thread(consumeThread);
