@@ -35,7 +35,7 @@ void consumeThread()
 
 		try
 		{
-			sub.consume();
+			sub->consume();
 		}
 		catch (const Error& err)
 		{
@@ -50,7 +50,7 @@ cell redis_start_subscribe(AMX* amx, cell* params)
 		return -1;
 
 	for (size_t i = 0; i < channels.size(); i++) {
-		sub.subscribe(channels[i]);
+		sub->subscribe(channels[i]);
 	}
 
 	th_subscriber = new std::thread(consumeThread);

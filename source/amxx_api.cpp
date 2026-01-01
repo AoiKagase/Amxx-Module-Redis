@@ -19,6 +19,7 @@ void OnPluginsUnloaded()
 	isSubsriberRunning = false;
 	channels.clear();
 	g_redis->bgsave();
+	delete sub;
 	delete g_redis;
 	delete th_subscriber;
 }

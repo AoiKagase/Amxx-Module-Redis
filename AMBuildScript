@@ -86,6 +86,7 @@ if cxx.like('gcc'):
   cxx.cxxflags += [
     '-std=c++11',
     '-fno-rtti',
+    '-pthread',
   ]
 
   cxx.linkflags += [
