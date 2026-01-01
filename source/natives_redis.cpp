@@ -42,10 +42,8 @@ cell redis_connect(AMX *amx, cell *params)
 
 		if (HasRedisOnMessage) 
 		{
-			MF_Log("[REDIS:DEBUG] ON_MESSAGE: channel='%s', message='%s'");
-
 			g_subscriber_options = g_connection_options;
-			g_subscriber_options.socket_timeout = std::chrono::milliseconds(300);
+//			g_subscriber_options.socket_timeout = std::chrono::milliseconds(300);
 			g_subscriber_redis = new Redis(g_subscriber_options);
 			sub = new Subscriber(g_subscriber_redis->subscriber());
 
