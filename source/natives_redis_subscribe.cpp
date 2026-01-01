@@ -14,7 +14,7 @@ cell redis_register_subscriber(AMX *amx, cell *params)
 	int len = 0;
 	std::string channel = MF_GetAmxString(amx, params[1], 0, &len);
 
-	channels.clear();
+//	channels.clear();
 	if (g_redis != NULL)
 	{
 		channels.push_back(channel);
