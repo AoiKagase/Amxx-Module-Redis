@@ -39,6 +39,8 @@ void consumeThread()
 		}
 		catch (const Error& err)
 		{
+			LOG_CONSOLE(PLID, "[DEBUG] SUBSCRIBE ERROR: %s", err.what());
+			continue;
 		}
 	}
 }
@@ -46,23 +48,22 @@ void consumeThread()
 // native redis_start_subscribe();
 cell redis_start_subscribe(AMX* amx, cell* params)
 {
-	LOG_CONSOLE(PLID, "[REDIS:DEBUG] START SUBSCRIBE FUNCTION.");
+	MF_Log("[DEBUG] START SUBSCRIBE FUNCTION.");
 
 	if (!HasRedisOnMessage) {
-		LOG_CONSOLE(PLID, "[REDIS:DEBUG] NOT EXISTS FORWARD. EXIT.");
+		MF_Log("[DEBUG] NOT EXISTS FORWARD. EXIT.");
 		return -1;
 	}
 
 	for (size_t i = 0; i < channels.size(); i++) {
 		sub->subscribe(channels[i]);
 	}
-	LOG_CONSOLE(PLID, "[REDIS:DEBUG] SUBSCRIBE CHANNELS.");
+	MF_Log("[DEBUG] SUBSCRIBE CHANNELS.");
 
 	th_subscriber = new std::thread(consumeThread);
-	LOG_CONSOLE(PLID, "[REDIS:DEBUG] CREATED THREAD.");
-	LOG_CONSOLE(PLID, "[REDIS:DEBUG] THREAD DETACHED.");
+	MF_Log("[DEBUG] CREATED THREAD.");
 
-	LOG_CONSOLE(PLID, "[REDIS:DEBUG] END SUBSCRIBE FUNCTION.");
+	MF_Log("[DEBUG] END SUBSCRIBE FUNCTION.");
 	return 0;
 }
 

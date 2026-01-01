@@ -51,7 +51,7 @@ cell redis_connect(AMX *amx, cell *params)
 
 			// Set callback functions.
 			sub->on_message([](std::string channel, std::string msg) {
-				MF_Log("[REDIS:DEBUG] ON_MESSAGE: channel='%s', message='%s'");
+				MF_Log("[REDIS:DEBUG] ON_MESSAGE: channel='%s', message='%s'", channel, msg);
 				// Process message of MESSAGE type.
 				MF_ExecuteForward(ForwardRedisOnMessage, channel, msg);
 			});
