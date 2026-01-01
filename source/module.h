@@ -9,6 +9,7 @@ using namespace sw::redis;
 extern AMX_NATIVE_INFO g_natives[];
 extern Redis* g_redis;
 extern Redis* g_subscriber_redis;
+extern bool isSubscriberRunning;
 
 extern int ForwardRedisOnMessage;
 extern int HasRedisOnMessage;

@@ -9,12 +9,14 @@ void OnAmxxAttach()
 
 void OnPluginsLoaded()
 {
+	isSubscriberRunning = false;
 	ForwardRedisOnMessage = MF_RegisterForward("Redis_Subscriber_OnMessage", ET_STOP, FP_STRING, FP_STRING, FP_DONE);
 	HasRedisOnMessage = UTIL_CheckForPublic("Redis_Subscriber_OnMessage");
 }
 
 void stop_subscribe()
 {
+	isSubscriberRunning = false;
 	if (sub) {
 		sub->unsubscribe();
 		delete sub;

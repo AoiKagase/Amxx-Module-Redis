@@ -4,6 +4,7 @@ using namespace sw::redis;
 
 std::vector<std::string> channels;
 std::thread *th_subscriber = NULL;
+bool isSubscriberRunning = false;
 
 // native redis_subscribe(const channel[]);
 cell redis_register_subscriber(AMX *amx, cell *params)
@@ -26,17 +27,24 @@ cell redis_register_subscriber(AMX *amx, cell *params)
 
 void consumeThread()
 {
-	try
+	isSubscriberRunning = true;
+
+	while (isSubscriberRunning)
 	{
-		while (true)
+		try
 		{
 			sub->consume();
 		}
-	}
-	catch (const Error& err)
-	{
-		LOG_CONSOLE(PLID, "[DEBUG] SUBSCRIBE ERROR: %s", err.what());
-		return;
+		catch (const TimeoutError& e)
+		{
+			// Do nothing, as we expect a timeout, as we set socket_timeout.
+			continue;
+		}
+		catch (const Error& err)
+		{
+			LOG_CONSOLE(PLID, "[DEBUG] SUBSCRIBE ERROR: %s", err.what());
+			return;
+		}
 	}
 }
 
