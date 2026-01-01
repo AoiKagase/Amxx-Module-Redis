@@ -27,7 +27,6 @@ cell redis_register_subscriber(AMX *amx, cell *params)
 
 void consumeThread()
 {
-	auto sub = g_redis->subscriber();
 	isSubsriberRunning = true;
 	while (true)
 	{
@@ -49,8 +48,6 @@ cell redis_start_subscribe(AMX* amx, cell* params)
 {
 	if (!HasRedisOnMessage)
 		return -1;
-
-	auto sub = g_redis->subscriber();
 
 	for (size_t i = 0; i < channels.size(); i++) {
 		sub.subscribe(channels[i]);

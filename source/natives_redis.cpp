@@ -4,6 +4,7 @@ using namespace sw::redis;
 
 Redis* g_redis = NULL;
 ConnectionOptions g_connection_options;
+Subscriber sub;
 
 const char* convertToCString(const OptionalString& optStr) {
     if (optStr) {
@@ -38,7 +39,7 @@ cell redis_connect(AMX *amx, cell *params)
 
 		if (HasRedisOnMessage) 
 		{
-			auto sub = g_redis->subscriber();
+			sub = g_redis->subscriber();
 
 			// Set callback functions.
 			sub.on_message([](std::string channel, std::string msg) {
