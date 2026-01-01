@@ -17,9 +17,12 @@ void OnPluginsLoaded()
 void OnPluginsUnloaded()
 {
 	isSubsriberRunning = false;
+	th_subscriber->join();
+
 	channels.clear();
 	g_redis->bgsave();
 	delete sub;
+	delete g_subscriber_redis;
 	delete g_redis;
 	delete th_subscriber;
 }

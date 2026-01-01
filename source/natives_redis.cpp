@@ -3,7 +3,10 @@
 using namespace sw::redis;
 
 Redis* g_redis = NULL;
+Redis* g_subscriber_redis = NULL;
+
 ConnectionOptions g_connection_options;
+ConnectionOptions g_subscriber_options;
 sw::redis::Subscriber *sub;
 
 const char* convertToCString(const OptionalString& optStr) {
@@ -39,10 +42,16 @@ cell redis_connect(AMX *amx, cell *params)
 
 		if (HasRedisOnMessage) 
 		{
-			sub = new Subscriber(g_redis->subscriber());
+			MF_Log("[REDIS:DEBUG] ON_MESSAGE: channel='%s', message='%s'");
+
+			g_subscriber_options = g_connection_options;
+			g_subscriber_options.socket_timeout = std::chrono::milliseconds(300);
+			g_subscriber_redis = new Redis(g_subscriber_options);
+			sub = new Subscriber(g_subscriber_redis->subscriber());
 
 			// Set callback functions.
 			sub->on_message([](std::string channel, std::string msg) {
+				MF_Log("[REDIS:DEBUG] ON_MESSAGE: channel='%s', message='%s'");
 				// Process message of MESSAGE type.
 				MF_ExecuteForward(ForwardRedisOnMessage, channel, msg);
 			});
