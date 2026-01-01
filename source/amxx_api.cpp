@@ -39,8 +39,5 @@ void OnPluginsUnloaded()
 
 	delete g_redis;
 	g_redis = nullptr;
-
-	delete th_subscriber;
-	th_subscriber = nullptr;
 }
 
