@@ -4,7 +4,7 @@ using namespace sw::redis;
 
 Redis* g_redis = NULL;
 ConnectionOptions g_connection_options;
-Subscriber sub;
+sw::redis::Subscriber sub;
 
 const char* convertToCString(const OptionalString& optStr) {
     if (optStr) {
